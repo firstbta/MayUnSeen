@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mayunseen/screens/form_page.dart';
+
+import 'listview_page.dart';
 
 class MyService extends StatefulWidget {
   @override
@@ -6,7 +9,9 @@ class MyService extends StatefulWidget {
 }
 
 class _MyServiceState extends State<MyService> {
-// Explict
+// Explict ตัวแปร
+
+  Widget currentWidget = FormPage(); //ลิ้งค์ไปหน้า Form page
 
 // Method
 
@@ -19,6 +24,12 @@ class _MyServiceState extends State<MyService> {
       ),
       title: Text('Form'),
       subtitle: Text('หน้ากรอกข้อมูล'),
+       onTap: () {
+        Navigator.of(context).pop();
+        setState(() {
+         currentWidget = FormPage(); 
+        });
+      },
     );
   }
 
@@ -31,6 +42,12 @@ class _MyServiceState extends State<MyService> {
       ),
       title: Text('ListView'),
       subtitle: Text('ข้อมูลท่องเที่ยว'),
+      onTap: () {
+        Navigator.of(context).pop();
+        setState(() {
+         currentWidget = ListViewPage(); 
+        });
+      },
     );
   }
 
@@ -87,7 +104,7 @@ class _MyServiceState extends State<MyService> {
       appBar: AppBar(
         title: Text('My service'),
       ),
-      body: Text('body'),
+      body: currentWidget, //เอา widget currentWidget ที่ไปลิ้งค์กับ Formpage
       drawer: myDrawer(),
     );
   }
