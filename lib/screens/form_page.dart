@@ -9,19 +9,20 @@ class FormPage extends StatefulWidget {
 }
 
 class _FormPageState extends State<FormPage> {
-  
   // ประกาศตัวแปร
   File file;
-  
 
   // Method
+
+  //
 
   //รูป
   Widget showImage() {
     return Container(
       margin: EdgeInsets.only(top: 10.0),
       height: 200.0,
-      child: file == null ? Image.asset('images/noimage.png') : Image.file(file) ,
+      child:
+          file == null ? Image.asset('images/noimage.png') : Image.file(file),
     );
   }
 
@@ -54,15 +55,12 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-
 //Thread Camera
-  Future<void> cametaThread() async{
-
+  Future<void> cametaThread() async {
     var imageObject = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
-      file = imageObject; 
+      file = imageObject;
     });
-
   }
 
   //ปุ่มGallery
@@ -80,13 +78,43 @@ class _FormPageState extends State<FormPage> {
   }
 
   //Thread Gallery
-  Future<void> galleryThread() async{
-
+  Future<void> galleryThread() async {
     var imageObject = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
-      file = imageObject; 
+      file = imageObject;
     });
+  }
 
+//Input Name
+  Widget nameText() {
+    return Container(
+      margin: EdgeInsets.only(left: 50.0, right: 50.0, top: 50.0),
+      child: TextFormField(
+        decoration: InputDecoration(
+          labelText: 'Name : ',
+          // helperText: 'Type your Display Name',
+          hintText: 'Type your Display Name',
+          icon: Icon(Icons.face),
+        ),
+      ),
+    );
+  }
+
+  //Input Detail
+  Widget detailText() {
+    return Container(
+      margin: EdgeInsets.only(left: 50.0, right: 50.0),
+      child: TextFormField(
+        keyboardType: TextInputType.multiline,
+        maxLines: 2,
+        decoration: InputDecoration(
+          labelText: 'Detail : ',
+          // helperText: 'Type your Detail',
+          hintText: 'Type your Detail',
+          icon: Icon(Icons.info),
+        ),
+      ),
+    );
   }
 
 //////////////////////////////////////////////////////////////////////
@@ -96,6 +124,8 @@ class _FormPageState extends State<FormPage> {
       children: <Widget>[
         showImage(),
         showButton(),
+        nameText(),
+        detailText(),
       ],
     );
   }
