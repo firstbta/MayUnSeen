@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; //import puglin กล้อง
+import 'package:location/location.dart'; //import puglin location
 
 class FormPage extends StatefulWidget {
   @override
@@ -11,6 +12,10 @@ class FormPage extends StatefulWidget {
 class _FormPageState extends State<FormPage> {
   // ประกาศตัวแปร
   File file;
+  double lat = 0, lng = 0;
+  bool imageBool = false; //ตัวแปรcheck รูปมีค่าไม
+  final formKey = GlobalKey<FormState>(); //validate formไม่่ให้มีค่าว่าง
+  String name, detail;
 
   // Method
 
@@ -50,16 +55,17 @@ class _FormPageState extends State<FormPage> {
         color: Colors.greenAccent,
       ),
       onPressed: () {
-        cametaThread();
+        cameraThread();
       },
     );
   }
 
 //Thread Camera
-  Future<void> cametaThread() async {
+  Future<void> cameraThread() async {
     var imageObject = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       file = imageObject;
+      imageBool = false;
     });
   }
 
@@ -82,6 +88,7 @@ class _FormPageState extends State<FormPage> {
     var imageObject = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
       file = imageObject;
+      imageBool = true;
     });
   }
 
@@ -96,6 +103,9 @@ class _FormPageState extends State<FormPage> {
           hintText: 'Type your Display Name',
           icon: Icon(Icons.face),
         ),
+        onSaved: (String value) {
+          name = value.trim();
+        },
       ),
     );
   }
@@ -113,20 +123,146 @@ class _FormPageState extends State<FormPage> {
           hintText: 'Type your Detail',
           icon: Icon(Icons.info),
         ),
+        onSaved: (String value) {
+          detail = value.trim();
+        },
       ),
     );
+  }
+
+  //locoation
+  @override
+  void initState() {
+    super.initState();
+    findLatLng();
+  }
+
+  //Threat open service Locaiton
+  Future<LocationData> findLocationData() async {
+    var location = Location();
+
+    try {
+      return await location.getLocation();
+    } catch (e) {
+      print('Error= $e');
+      return null;
+    }
+  }
+
+  //Threat Lat Lon
+  Future<void> findLatLng() async {
+    var currentLocation = await findLocationData();
+
+    if (currentLocation == null) {
+      myAlert('Permission Check Location', 'Please turn on loctionatio service');
+    } else {
+      setState(() {
+        lat = currentLocation.latitude;
+        lng = currentLocation.longitude;
+      });
+    }
+  }
+
+  // Lat
+  Widget showLat() {
+    return Column(
+      children: <Widget>[
+        Text(
+          'Latitude',
+          style: TextStyle(fontSize: 20.0),
+        ),
+        Text('$lat')
+      ],
+    );
+  }
+
+  // lng
+  Widget showLng() {
+    return Column(
+      children: <Widget>[
+        Text(
+          'Longtitude',
+          style: TextStyle(fontSize: 20.0),
+        ),
+        Text('$lng')
+      ],
+    );
+  }
+
+  //upload
+  Widget uploadValueButton() {
+    return Container(
+      padding: EdgeInsets.only(top: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            child: Icon(Icons.cloud_upload),
+            onPressed: () {
+              if (imageBool) {
+
+                formKey.currentState.save(); // check validate ค่าจาก Form
+                //validate
+                if ((name.isEmpty) || (detail.isEmpty)) {
+
+                  myAlert('No Input', 'Please input data every Blank');
+                  
+                } else {
+
+                }
+
+
+              } else {
+                myAlert('Non Choose Image',
+                    'Please Choose Image From Gallery or Take a photo');
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+// Alert
+  void myAlert(String title, String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
   }
 
 //////////////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        showImage(),
-        showButton(),
-        nameText(),
-        detailText(),
-      ],
+    return Form(
+      key: formKey, // warp with form : validate formไม่่ให้มีค่าว่าง
+      child: ListView(
+        padding: EdgeInsets.only(bottom: 50.0, right: 10.0),
+        children: <Widget>[
+          showImage(),
+          showButton(),
+          nameText(),
+          detailText(),
+          SizedBox(
+            height: 20.0,
+          ),
+          showLat(),
+          showLng(),
+          uploadValueButton(),
+        ],
+      ),
     );
   }
 }
