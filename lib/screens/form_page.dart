@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; //import puglin กล้อง
 import 'package:location/location.dart'; //import puglin location
@@ -16,8 +17,7 @@ class _FormPageState extends State<FormPage> {
   double lat = 0, lng = 0;
   bool imageBool = false; //ตัวแปรcheck รูปมีค่าไม
   final formKey = GlobalKey<FormState>(); //validate formไม่่ให้มีค่าว่าง
-  String name, detail,code;
-
+  String name, detail, code, urlPicture;
 
   // Method
 
@@ -157,7 +157,8 @@ class _FormPageState extends State<FormPage> {
     var currentLocation = await findLocationData();
 
     if (currentLocation == null) {
-      myAlert('Permission Check Location', 'Please turn on loctionatio service');
+      myAlert(
+          'Permission Check Location', 'Please turn on loctionatio service');
     } else {
       setState(() {
         lat = currentLocation.latitude;
@@ -203,21 +204,19 @@ class _FormPageState extends State<FormPage> {
             child: Icon(Icons.cloud_upload),
             onPressed: () {
               if (imageBool) {
-
                 formKey.currentState.save(); // check validate ค่าจาก Form
                 //validate
                 if ((name.isEmpty) || (detail.isEmpty)) {
-
                   myAlert('No Input', 'Please input data every Blank');
-                  
                 } else {
-                  print('name = $name,detail = $detail,lat = $lat,lng = $lng,code = $code');
+                  //print input
+                  print(
+                      'name = $name,detail = $detail,lat = $lat,lng = $lng,code = $code');
 
-
-
+                  //upload image
+                  //call Theard uploadFileToStorage
+                  uploadFileToStorage();
                 }
-
-
               } else {
                 myAlert('Non Choose Image',
                     'Please Choose Image From Gallery or Take a photo');
@@ -227,6 +226,29 @@ class _FormPageState extends State<FormPage> {
         ],
       ),
     );
+  }
+
+//Thead uploadimage to Storage Firebase
+  Future uploadFileToStorage() async {
+    String namePicture = '$code.jpg'; //ชื่อรูปเอาค่าจาก RandomID ex. code1234
+
+    FirebaseStorage firebaseStorage =
+        FirebaseStorage.instance; //สร้างยามไปเชื่อมไปStorage Firebase
+    StorageReference storageReference = firebaseStorage
+        .ref()
+        .child('Picture/$namePicture'); //เอาไฟล์ไปลง path pictureของ firebase
+    StorageUploadTask storageUploadTask =
+        storageReference.putFile(file); //push fileรูปที่ประกาสไว้ข้างบนมาใส่
+
+    //uploadแล้วดึงเอาไฟล์รูป urlPicture เก็บลงฐานข้อมูล
+    //uploadจนสำเร็จก่อน แล้วเอาค่า urlมา มาจาก response
+    await (await storageUploadTask.onComplete)
+        .ref
+        .getDownloadURL()
+        .then((response) {
+      urlPicture = response;
+      print('urlpic = $urlPicture');
+    });
   }
 
 // Alert
@@ -251,11 +273,9 @@ class _FormPageState extends State<FormPage> {
 
   //Create code
 
-  void createCode(){
-
+  void createCode() {
     int randInt = Random().nextInt(10000); //แรนด้อมไม่เกิน 10000
     code = 'code$randInt';
-    
   }
 
 //////////////////////////////////////////////////////////////////////
