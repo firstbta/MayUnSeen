@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mayunseen/models/unseen_model.dart';
+import 'package:mayunseen/screens/show_detail.dart';
 
 class ListViewPage extends StatefulWidget {
   @override
@@ -89,16 +90,26 @@ class _ListViewPageState extends State<ListViewPage> {
     return ListView.builder(
       itemCount: unseenModels.length,
       itemBuilder: (BuildContext context, int index) {
-        return Container(
-          decoration: index % 2 == 0
-              ? BoxDecoration(color: Colors.grey[200]) //true
-              : BoxDecoration(color: Colors.white), //false
-          child: Row(
-            children: <Widget>[
-              showPicture(index),
-              showText(index),
-            ],
+        return GestureDetector(
+          // wrap with new widget เปลี่ยนชื่อเป็นGestureDetector เพื่อครอบให้ Containner มี ontap
+          child: Container(
+            decoration: index % 2 == 0
+                ? BoxDecoration(color: Colors.grey[200]) //true
+                : BoxDecoration(color: Colors.white), //false
+            child: Row(
+              children: <Widget>[
+                showPicture(index),
+                showText(index),
+              ],
+            ),
           ),
+          onTap: () {
+            MaterialPageRoute materialPageRoute = MaterialPageRoute(
+                builder: (BuildContext context) => ShowDetail(
+                      unseenModel: unseenModels[index],//ส่งโมเดลไปยังหน้าdetail ผ่าน ShowDetail โดยต้องประกาศตัวแปรก่อน
+                    ));
+            Navigator.of(context).push(materialPageRoute); //สร้างลูกศรย้อนกลับ
+          },
         );
       },
     );
