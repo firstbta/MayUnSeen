@@ -66,10 +66,10 @@ class _FormPageState extends State<FormPage> {
 
 //Thread Camera
   Future<void> cameraThread() async {
-    var imageObject = await ImagePicker.pickImage(source: ImageSource.camera);
+    var imageObject = await ImagePicker.pickImage(source: ImageSource.camera,maxWidth: 800.0,maxHeight: 480.0);
     setState(() {
       file = imageObject;
-      imageBool = false;
+      imageBool = true;
     });
   }
 
@@ -89,7 +89,7 @@ class _FormPageState extends State<FormPage> {
 
   //Thread Gallery
   Future<void> galleryThread() async {
-    var imageObject = await ImagePicker.pickImage(source: ImageSource.gallery);
+    var imageObject = await ImagePicker.pickImage(source: ImageSource.gallery,maxWidth: 800.0,maxHeight: 480.0);
     setState(() {
       file = imageObject;
       imageBool = true;
