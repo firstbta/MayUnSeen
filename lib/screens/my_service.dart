@@ -11,14 +11,14 @@ class MyService extends StatefulWidget {
 class _MyServiceState extends State<MyService> {
 // Explict ตัวแปร
 
-  Widget currentWidget = FormPage(); //ลิ้งค์ไปหน้า Form page
+  Widget currentWidget = ListViewPage(); //หน้า Defaultลิ้งค์ไปหน้า Form page
 
 // Method
 
   Widget menuFormPage() {
     return ListTile(
       leading: Icon(
-        Icons.filter_1,
+        Icons.filter_2,
         size: 36.0,
         color: Colors.blue,
       ),
@@ -36,7 +36,7 @@ class _MyServiceState extends State<MyService> {
   Widget menuListViewPage() {
     return ListTile(
       leading: Icon(
-        Icons.filter_2,
+        Icons.filter_1,
         size: 36.0,
         color: Colors.blue,
       ),
@@ -89,10 +89,11 @@ class _MyServiceState extends State<MyService> {
       child: ListView(
         children: <Widget>[
           myHead(),
-          menuFormPage(),
-          Divider(),
           menuListViewPage(),
           Divider(),
+          menuFormPage(),
+          Divider(),
+         
         ],
       ),
     );

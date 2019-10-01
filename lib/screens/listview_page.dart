@@ -6,6 +6,15 @@ class ListViewPage extends StatefulWidget {
 }
 
 class _ListViewPageState extends State<ListViewPage> {
+// Explict ตัวแปร
+
+ 
+
+// Method
+
+
+
+  ////////////////////////////////////////////////////////////
   @override
   Widget build(BuildContext context) {
     return Text('This is ListView Page');

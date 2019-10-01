@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; //import puglin กล้อง
-import 'package:location/location.dart'; //import puglin location
+import 'package:location/location.dart';
+import 'package:mayunseen/screens/my_service.dart'; //import puglin location
 
 class FormPage extends StatefulWidget {
   @override
@@ -248,6 +250,37 @@ class _FormPageState extends State<FormPage> {
         .then((response) {
       urlPicture = response;
       print('urlpic = $urlPicture');
+
+      //call Thead เพื่อ Insert ข้อมูลลง DB
+      updateValueToFireStore();
+    });
+  }
+
+  //TheadInsert Input to Storage เพื่อ Insert ข้อมูลลง DB
+  Future<void> updateValueToFireStore() async {
+    Firestore firestore = Firestore.instance; //สร้างยามเพื่อเชื่อม firebase
+
+    //เชื่อมไปยังตารางของ DB
+    Map<String, dynamic> map = Map();
+    map['Name'] = name;
+    map['Detail'] = detail;
+    map['Lat'] = lat;
+    map['Lng'] = lng;
+    map['Code'] = code;
+    map['UrlPicture'] = urlPicture;
+
+    await firestore
+        .collection('UnSeen')
+        .document()
+        .setData(map)
+        .then((response) {
+      print('upload Success');
+
+      // redirect ไปหน้าอื่น ในกรณีมีการกรอกข้อมูล
+      MaterialPageRoute materialPageRoute = MaterialPageRoute(
+          builder: (BuildContext context) => MyService()); //เรียกไปหน้าใหม่
+      Navigator.of(context).pushAndRemoveUntil(
+          materialPageRoute, (Route<dynamic> route) => false); //ลบหน้าเก่าทิ้ง
     });
   }
 
