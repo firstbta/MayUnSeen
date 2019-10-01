@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart'; //import puglin กล้อง
@@ -15,7 +16,8 @@ class _FormPageState extends State<FormPage> {
   double lat = 0, lng = 0;
   bool imageBool = false; //ตัวแปรcheck รูปมีค่าไม
   final formKey = GlobalKey<FormState>(); //validate formไม่่ให้มีค่าว่าง
-  String name, detail;
+  String name, detail,code;
+
 
   // Method
 
@@ -130,11 +132,12 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  //locoation
+  //Call function
   @override
   void initState() {
     super.initState();
     findLatLng();
+    createCode();
   }
 
   //Threat open service Locaiton
@@ -208,6 +211,9 @@ class _FormPageState extends State<FormPage> {
                   myAlert('No Input', 'Please input data every Blank');
                   
                 } else {
+                  print('name = $name,detail = $detail,lat = $lat,lng = $lng,code = $code');
+
+
 
                 }
 
@@ -241,6 +247,15 @@ class _FormPageState extends State<FormPage> {
             ],
           );
         });
+  }
+
+  //Create code
+
+  void createCode(){
+
+    int randInt = Random().nextInt(10000); //แรนด้อมไม่เกิน 10000
+    code = 'code$randInt';
+    
   }
 
 //////////////////////////////////////////////////////////////////////

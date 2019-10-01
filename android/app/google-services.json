@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "96469833492",
+    "firebase_url": "https://mayunseen-83115.firebaseio.com",
+    "project_id": "mayunseen-83115",
+    "storage_bucket": "mayunseen-83115.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:96469833492:android:fc1f78d504ca65657c1401",
+        "android_client_info": {
+          "package_name": "com.masterung.mayunseen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "96469833492-n4jmrr601i3bk580ufg9socb1tf38buf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnZ8Z4yYgyfElQ7nJgJuAmFPmOXzsG14g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "96469833492-n4jmrr601i3bk580ufg9socb1tf38buf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
