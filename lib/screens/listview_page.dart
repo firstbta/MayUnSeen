@@ -72,7 +72,7 @@ class _ListViewPageState extends State<ListViewPage> {
         children: <Widget>[
           Text(
             unseenModels[index].name,
-            style: TextStyle(fontSize: 20.0, color: Colors.red),
+            style: TextStyle(fontSize: 20.0, color: Colors.blue),
           ),
           Text(
             unseenModels[index].detail,
@@ -89,8 +89,16 @@ class _ListViewPageState extends State<ListViewPage> {
     return ListView.builder(
       itemCount: unseenModels.length,
       itemBuilder: (BuildContext context, int index) {
-        return Row(
-          children: <Widget>[showPicture(index), showText(index)],
+        return Container(
+          decoration: index % 2 == 0
+              ? BoxDecoration(color: Colors.grey[200]) //true
+              : BoxDecoration(color: Colors.white), //false
+          child: Row(
+            children: <Widget>[
+              showPicture(index),
+              showText(index),
+            ],
+          ),
         );
       },
     );
